@@ -16,7 +16,7 @@
         "request": "launch",
         "program": "${file}",
         "console": "integratedTerminal",
-        "args": ["day-07/input.txt"]
+        "args": ["day-07/test-input-2.txt"]
       }
     ]
   }
