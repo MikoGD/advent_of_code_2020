@@ -1,4 +1,4 @@
-from collections import defaultdict
+from collections import defaultdict, deque
 from pprint import pprint as pp
 from typing import List, Dict, Set, Tuple
 import math
@@ -16,25 +16,18 @@ def main():
 # ENDM main()
 
 
-def check_for_gold(bags_dict: Dict[str, List[str]], known_bags: Set[str], bags: List[str], prev_bag: str) -> Tuple[bool, Set[str]]:
-    curr_bag = bags.pop()
-
-    if curr_bag in known_bags:
-        if prev_bag != "":
-            known_bags.add(prev_bag)
+def check_for_gold(bags_dict: Dict[str, List[str]], bags: List[str]) -> bool:
+    while len(bags) != 0:
+        curr_bag = bags.pop()
+        inside = bags_dict[curr_bag]
+        if "shiny gold" in inside:
+            return True
+        else:
+            bags += bags_dict[curr_bag]
         # END IF
-        return True, known_bags
-    # END IF
+    # END WHILE
 
-    new_bags: List[str] = bags_dict[curr_bag]
-    if len(new_bags) == 0 and len(bags) == 0:
-        return False, known_bags
-    elif "shiny gold" in new_bags:
-        known_bags.add(curr_bag)
-        return True, known_bags
-    # END IF
-
-    return check_for_gold(bags_dict, known_bags, new_bags + bags, curr_bag)
+    return False
 # END check_for_gold()
 
 
@@ -64,12 +57,9 @@ def part_one():
         # pp(bags_dict)
 
         count = 0
-        known_bags = set()
         for bag in bags_dict.keys():
-            has_gold, known_bags = check_for_gold(
-                bags_dict, known_bags, [bag], "")
+            has_gold = check_for_gold(bags_dict, [bag])
             if has_gold == True:
-                known_bags.add(bag)
                 count += 1
             # END IF
         # END FOR
