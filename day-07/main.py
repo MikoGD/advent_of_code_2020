@@ -46,6 +46,7 @@ def part_one():
             bags = [bag]
             while len(bags) != 0:
                 curr_bag = bags.pop()
+
                 inside = bags_dict[curr_bag]
                 if "shiny gold" in inside:
                     count += 1
@@ -79,23 +80,22 @@ def part_two():
             if bags[0] == "no other":
                 bags_dict[container] = []
             else:
-                temp = []
+                temp: List[str] = []
                 for bag in bags:
-                    index = bag.find(" ")
+                    index: int = bag.find(" ")
                     temp.append((int(bag[:index]), bag[index + 1:]))
                 # END FOR
-                bags = temp
-                bags_dict[container] = bags
+                bags_dict[container] = temp
             # END IF
         # END FOR
 
         # pp(bags_dict)
 
-        count = 0
-        bags = bags_dict["shiny gold"]
+        count: int = 0
+        bags: List[Tuple[int, str]] = bags_dict["shiny gold"]
 
         while len(bags) != 0:
-            curr_bag = bags.pop()
+            curr_bag: Tuple[int, str] = bags.pop()
 
             amount, type = curr_bag
             count += amount
