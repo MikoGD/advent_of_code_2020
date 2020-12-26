@@ -36,6 +36,24 @@ def execute(i, acc, program):
 # END execute()
 
 
+def run_program(program_copy):
+    i = 0
+    acc = 0
+
+    while True:
+        i, acc = execute(i, acc, program_copy)
+
+        if i == -1:
+            break
+        elif i >= len(program_copy):
+            break
+        # END IF
+    # END WHILE
+
+    return i, acc
+# END run_program()
+
+
 def part_one():
     if (len(sys.argv) < 2):
         print("ERROR: no input file")
@@ -44,17 +62,7 @@ def part_one():
 
     with open(sys.argv[1], "r", encoding="utf-8") as file:
         program = file.read().split("\n")
-        i = 0
-        acc = 0
-
-        while True:
-            i, acc = execute(i, acc, program)
-
-            if i == -1:
-                break
-            # END IF
-        # END WHILE
-
+        i, acc = run_program(program)
         print(acc)
     # END WITH
 # END part_one()
@@ -67,7 +75,31 @@ def part_two():
     # END IF
 
     with open(sys.argv[1], "r", encoding="utf-8") as file:
-        print("Part two")
+        program = file.read().split("\n")
+        previous = []
+
+        for i, instruction in enumerate(program):
+            if "nop" in instruction:
+                previous.append((i, instruction.replace("nop", "jmp")))
+            elif "jmp" in instruction:
+                previous.append((i, instruction.replace("jmp", "nop")))
+            # END IF
+        # END FOR
+
+        acc = 0
+        while len(previous) != 0:
+            i, instruction = previous.pop()
+            program_copy = program.copy()
+            program_copy[i] = instruction
+
+            i, acc = run_program(program_copy)
+
+            if i >= len(program):
+                break
+            # END IF
+        # END WHILE
+
+        print(acc)
     # END WITH
 # END part_two()
 
