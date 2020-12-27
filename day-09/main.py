@@ -57,7 +57,30 @@ def part_two():
     # END IF
 
     with open(sys.argv[1], "r", encoding="utf-8") as file:
-        print("Part two")
+        xmas_data = [int(line) for line in file]
+        invalid_number = 167829540
+        invalid_number_index = xmas_data.index(invalid_number)
+        selection = xmas_data[0:invalid_number_index]
+        selection_length = len(selection)
+        start = 0
+        end = 2
+        while end <= selection_length:
+
+            curr_start = start
+            curr_end = end
+            while curr_end <= selection_length:
+                curr_sum = sum(selection[curr_start:curr_end])
+                if curr_sum == invalid_number:
+                    selection = selection[curr_start:curr_end]
+                    selection.sort()
+                    print(selection[0] + selection[-1])
+                    return
+                # END IF
+                curr_start += 1
+                curr_end += 1
+            # END WHILE
+            end += 1
+        # END WHILE
     # END WITH
 # END part_two()
 
